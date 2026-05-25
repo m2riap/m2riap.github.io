@@ -2,111 +2,272 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Magical Dolphin Ocean</title>
+<title>Magical Dolphin Paradise</title>
 
 <style>
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    cursor:crosshair;
+    font-family:sans-serif;
+}
+
+#scene{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* BACKGROUND IMAGE */
+#bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:1;
+    pointer-events:none;
+}
+
+/* DOLPHIN LAYER */
+#dolphinLayer{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+/* SPARKLES */
+canvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:3;
+    pointer-events:none;
+}
+
+/* REALISTIC DOLPHINS */
+.dolphin{
+    position:absolute;
+    width:220px;
+    opacity:0.95;
+    filter:
+        drop-shadow(0 0 10px rgba(255,255,255,0.6))
+        drop-shadow(0 0 30px rgba(0,255,255,0.35));
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+}
+
+/* DIFFERENT JUMP PATHS */
+
+.jump1{
+    top:55%;
+    animation:jump1 14s infinite;
+}
+
+.jump2{
+    top:35%;
+    animation:jump2 18s infinite;
+}
+
+.jump3{
+    top:65%;
+    animation:jump3 16s infinite;
+}
+
+.jump4{
+    top:20%;
+    animation:jump4 22s infinite;
+}
+
+.jump5{
+    top:50%;
+    animation:jump5 20s infinite;
+}
+
+/* JUMPING MOTION */
+
+@keyframes jump1{
+
+    0%{
+        transform:
+            translateX(-300px)
+            translateY(100px)
+            rotate(10deg)
+            scale(0.9);
     }
 
-    html,body{
-        width:100%;
-        height:100%;
-        overflow:hidden;
-        background:#000;
-        cursor:crosshair;
-        font-family:sans-serif;
+    20%{
+        transform:
+            translateX(20vw)
+            translateY(-120px)
+            rotate(-20deg)
+            scale(1);
     }
 
-    #scene{
-        position:relative;
-        width:100vw;
-        height:100vh;
-        overflow:hidden;
+    40%{
+        transform:
+            translateX(40vw)
+            translateY(-260px)
+            rotate(-40deg)
+            scale(1.1);
     }
 
-    /* BACKGROUND IMAGE */
-    #bg{
-        position:absolute;
-        inset:0;
-        width:100%;
-        height:100%;
-        object-fit:cover;
-        z-index:1;
-        pointer-events:none;
-        user-select:none;
+    60%{
+        transform:
+            translateX(60vw)
+            translateY(-100px)
+            rotate(-10deg)
+            scale(1);
     }
 
-    /* DOLPHIN LAYER */
-    #dolphins{
-        position:absolute;
-        inset:0;
-        z-index:2;
-        pointer-events:none;
+    100%{
+        transform:
+            translateX(120vw)
+            translateY(120px)
+            rotate(15deg)
+            scale(0.9);
+    }
+}
+
+@keyframes jump2{
+
+    0%{
+        transform:
+            translateX(-250px)
+            translateY(120px)
+            rotate(15deg);
     }
 
-    /* SPARKLE CANVAS */
-    canvas{
-        position:absolute;
-        inset:0;
-        width:100%;
-        height:100%;
-        z-index:3;
-        pointer-events:none;
+    30%{
+        transform:
+            translateX(35vw)
+            translateY(-220px)
+            rotate(-30deg)
+            scale(1.15);
     }
 
-    /* FLOATING DOLPHINS */
-    .dolphin{
-        position:absolute;
-        font-size:70px;
-        opacity:0.8;
-        filter:
-            drop-shadow(0 0 10px rgba(255,255,255,0.8))
-            drop-shadow(0 0 20px rgba(0,255,255,0.6));
-        animation:float linear infinite;
-        user-select:none;
+    55%{
+        transform:
+            translateX(55vw)
+            translateY(-320px)
+            rotate(-45deg)
+            scale(1.2);
     }
 
-    @keyframes float{
-        from{
-            transform:
-                translateX(-200px)
-                translateY(0px)
-                rotate(0deg);
-        }
-
-        25%{
-            transform:
-                translateX(25vw)
-                translateY(-40px)
-                rotate(-5deg);
-        }
-
-        50%{
-            transform:
-                translateX(50vw)
-                translateY(20px)
-                rotate(5deg);
-        }
-
-        75%{
-            transform:
-                translateX(75vw)
-                translateY(-30px)
-                rotate(-3deg);
-        }
-
-        to{
-            transform:
-                translateX(120vw)
-                translateY(0px)
-                rotate(0deg);
-        }
+    100%{
+        transform:
+            translateX(120vw)
+            translateY(150px)
+            rotate(20deg);
     }
+}
+
+@keyframes jump3{
+
+    0%{
+        transform:
+            translateX(-350px)
+            translateY(150px)
+            rotate(10deg);
+    }
+
+    25%{
+        transform:
+            translateX(30vw)
+            translateY(-100px)
+            rotate(-10deg);
+    }
+
+    50%{
+        transform:
+            translateX(50vw)
+            translateY(-220px)
+            rotate(-35deg)
+            scale(1.15);
+    }
+
+    100%{
+        transform:
+            translateX(120vw)
+            translateY(180px)
+            rotate(15deg);
+    }
+}
+
+@keyframes jump4{
+
+    0%{
+        transform:
+            translateX(-250px)
+            translateY(80px)
+            rotate(5deg)
+            scale(0.8);
+    }
+
+    50%{
+        transform:
+            translateX(50vw)
+            translateY(-250px)
+            rotate(-45deg)
+            scale(1.25);
+    }
+
+    100%{
+        transform:
+            translateX(120vw)
+            translateY(100px)
+            rotate(10deg)
+            scale(0.8);
+    }
+}
+
+@keyframes jump5{
+
+    0%{
+        transform:
+            translateX(-300px)
+            translateY(120px)
+            rotate(20deg);
+    }
+
+    35%{
+        transform:
+            translateX(40vw)
+            translateY(-180px)
+            rotate(-25deg)
+            scale(1.1);
+    }
+
+    60%{
+        transform:
+            translateX(65vw)
+            translateY(-280px)
+            rotate(-50deg)
+            scale(1.25);
+    }
+
+    100%{
+        transform:
+            translateX(120vw)
+            translateY(150px)
+            rotate(15deg);
+    }
+}
 
 </style>
 </head>
@@ -115,53 +276,42 @@
 
 <div id="scene">
 
-    <!-- REPLACE THIS WITH YOUR IMAGE FILE -->
+    <!-- YOUR BACKGROUND -->
     <img id="bg" src="background.jpg" alt="Fantasy Ocean">
 
-    <!-- FLOATING DOLPHINS -->
-    <div id="dolphins">
+    <!-- DOLPHINS -->
+    <div id="dolphinLayer">
 
-        <div class="dolphin"
-            style="
-                top:12%;
-                animation-duration:18s;
-                animation-delay:-2s;
-            ">
-            🐬
-        </div>
+        <!-- Use your own transparent dolphin PNGs -->
+        <!-- Replace dolphin.png with your file -->
 
-        <div class="dolphin"
-            style="
-                top:35%;
-                font-size:90px;
-                animation-duration:24s;
-                animation-delay:-10s;
-                opacity:0.7;
-            ">
-            🐬
-        </div>
+        <img src="https://pngimg.com/d/dolphin_PNG713.png"
+             class="dolphin jump1"
+             style="width:300px; animation-delay:-2s;">
 
-        <div class="dolphin"
-            style="
-                top:62%;
-                font-size:60px;
-                animation-duration:20s;
-                animation-delay:-5s;
-                opacity:0.6;
-            ">
-            🐬
-        </div>
+        <img src="https://pngimg.com/d/dolphin_PNG713.png"
+             class="dolphin jump2"
+             style="width:260px; animation-delay:-7s;">
 
-        <div class="dolphin"
-            style="
-                top:78%;
-                font-size:80px;
-                animation-duration:28s;
-                animation-delay:-15s;
-                opacity:0.5;
-            ">
-            🐬
-        </div>
+        <img src="https://pngimg.com/d/dolphin_PNG713.png"
+             class="dolphin jump3"
+             style="width:240px; animation-delay:-11s;">
+
+        <img src="https://pngimg.com/d/dolphin_PNG713.png"
+             class="dolphin jump4"
+             style="width:340px; animation-delay:-4s;">
+
+        <img src="https://pngimg.com/d/dolphin_PNG713.png"
+             class="dolphin jump5"
+             style="width:280px; animation-delay:-14s;">
+
+        <img src="https://pngimg.com/d/dolphin_PNG713.png"
+             class="dolphin jump1"
+             style="width:220px; animation-delay:-9s; top:70%;">
+
+        <img src="https://pngimg.com/d/dolphin_PNG713.png"
+             class="dolphin jump2"
+             style="width:370px; animation-delay:-18s; top:8%;">
 
     </div>
 
@@ -175,19 +325,23 @@
 const canvas = document.getElementById("sparkleCanvas");
 const ctx = canvas.getContext("2d");
 
-let width, height;
+let width;
+let height;
 
 function resizeCanvas(){
+
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
 }
 
 resizeCanvas();
+
 window.addEventListener("resize", resizeCanvas);
+
+/* SPARKLES */
 
 const sparkles = [];
 
-/* SPARKLE CLASS */
 class Sparkle{
 
     constructor(x,y){
@@ -222,7 +376,7 @@ class Sparkle{
 
         ctx.save();
 
-        ctx.translate(this.x, this.y);
+        ctx.translate(this.x,this.y);
 
         /* GLOW */
         const gradient = ctx.createRadialGradient(
@@ -246,7 +400,7 @@ class Sparkle{
         ctx.arc(0,0,this.size * 6,0,Math.PI*2);
         ctx.fill();
 
-        /* STAR SHAPE */
+        /* STAR */
         ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
         ctx.lineWidth = 1.5;
 
@@ -265,6 +419,7 @@ class Sparkle{
 }
 
 /* CREATE SPARKLES */
+
 function createSparkles(x,y){
 
     for(let i=0;i<6;i++){
@@ -274,12 +429,14 @@ function createSparkles(x,y){
 }
 
 /* MOUSE */
+
 window.addEventListener("mousemove",(e)=>{
 
     createSparkles(e.clientX,e.clientY);
 });
 
 /* TOUCH */
+
 window.addEventListener("touchmove",(e)=>{
 
     const touch = e.touches[0];
@@ -288,6 +445,7 @@ window.addEventListener("touchmove",(e)=>{
 });
 
 /* ANIMATION LOOP */
+
 function animate(){
 
     ctx.clearRect(0,0,width,height);
