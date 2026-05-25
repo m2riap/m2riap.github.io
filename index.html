@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Magical Dolphin Paradise</title>
+<title>Fantasy Dolphin Ocean</title>
 
 <style>
 
@@ -18,129 +18,266 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#000;
+    background:#00111f;
     cursor:crosshair;
-    font-family:sans-serif;
+    font-family:Arial, sans-serif;
 }
+
+body{
+    position:relative;
+}
+
+/* =========================
+   MAIN SCENE
+========================= */
 
 #scene{
     position:relative;
     width:100vw;
     height:100vh;
     overflow:hidden;
+
+    /* OCEAN SKY BACKGROUND */
+    background:
+        radial-gradient(circle at top, rgba(255,255,255,0.3), transparent 40%),
+        linear-gradient(to bottom,
+            #4dd7ff 0%,
+            #14a8ff 25%,
+            #0077c8 55%,
+            #003e7a 100%);
 }
 
-/* BACKGROUND IMAGE */
-#bg{
+/* =========================
+   CLOUDS
+========================= */
+
+.cloud{
     position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:1;
+    background:rgba(255,255,255,0.95);
+    border-radius:100px;
+    filter:blur(1px);
+    opacity:0.9;
+}
+
+.cloud::before,
+.cloud::after{
+    content:"";
+    position:absolute;
+    background:white;
+    border-radius:50%;
+}
+
+.cloud1{
+    width:180px;
+    height:60px;
+    top:10%;
+    left:8%;
+    animation:cloudMove 45s linear infinite;
+}
+
+.cloud1::before{
+    width:80px;
+    height:80px;
+    left:20px;
+    top:-35px;
+}
+
+.cloud1::after{
+    width:100px;
+    height:100px;
+    right:20px;
+    top:-45px;
+}
+
+.cloud2{
+    width:220px;
+    height:70px;
+    top:18%;
+    left:65%;
+    animation:cloudMove 60s linear infinite reverse;
+}
+
+.cloud2::before{
+    width:90px;
+    height:90px;
+    left:35px;
+    top:-35px;
+}
+
+.cloud2::after{
+    width:120px;
+    height:120px;
+    right:20px;
+    top:-55px;
+}
+
+@keyframes cloudMove{
+    from{
+        transform:translateX(-100px);
+    }
+    to{
+        transform:translateX(150px);
+    }
+}
+
+/* =========================
+   RAINBOW
+========================= */
+
+.rainbow{
+    position:absolute;
+    width:1200px;
+    height:600px;
+    left:50%;
+    top:-200px;
+    transform:translateX(-50%);
+    border-radius:50%;
     pointer-events:none;
+    opacity:0.85;
+
+    background:
+        radial-gradient(circle at center,
+            transparent 57%,
+            red 58%,
+            orange 61%,
+            yellow 64%,
+            lime 67%,
+            cyan 70%,
+            blue 73%,
+            violet 76%,
+            transparent 77%);
 }
 
-/* DOLPHIN LAYER */
-#dolphinLayer{
+/* =========================
+   OCEAN
+========================= */
+
+.ocean{
     position:absolute;
-    inset:0;
-    z-index:2;
+    bottom:0;
+    width:100%;
+    height:45%;
+    background:
+        linear-gradient(to bottom,
+            rgba(255,255,255,0.15),
+            rgba(255,255,255,0)),
+        linear-gradient(to bottom,
+            #0094ff,
+            #003e7a 70%,
+            #00192d);
+
     overflow:hidden;
-    pointer-events:none;
 }
 
-/* SPARKLES */
-canvas{
+/* WATER SHIMMER */
+.ocean::before{
+    content:"";
     position:absolute;
     inset:0;
-    width:100%;
-    height:100%;
-    z-index:3;
-    pointer-events:none;
+
+    background:
+        repeating-linear-gradient(
+            -8deg,
+            rgba(255,255,255,0.15) 0px,
+            rgba(255,255,255,0.05) 2px,
+            transparent 4px,
+            transparent 18px
+        );
+
+    opacity:0.3;
+    animation:waterFlow 6s linear infinite;
 }
 
-/* REALISTIC DOLPHINS */
+@keyframes waterFlow{
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(120px);
+    }
+}
+
+/* =========================
+   DOLPHINS
+========================= */
+
 .dolphin{
     position:absolute;
-    width:220px;
-    opacity:0.95;
+    width:260px;
+    z-index:5;
+    pointer-events:none;
+
     filter:
-        drop-shadow(0 0 10px rgba(255,255,255,0.6))
-        drop-shadow(0 0 30px rgba(0,255,255,0.35));
-    animation-timing-function:linear;
-    animation-iteration-count:infinite;
+        drop-shadow(0 0 15px rgba(255,255,255,0.6))
+        drop-shadow(0 0 35px rgba(0,255,255,0.4));
 }
 
-/* DIFFERENT JUMP PATHS */
-
-.jump1{
-    top:55%;
-    animation:jump1 14s infinite;
+/* MAIN HERO DOLPHIN */
+.d1{
+    animation:jump1 9s ease-in-out infinite;
 }
 
-.jump2{
-    top:35%;
-    animation:jump2 18s infinite;
+/* LEFT DOLPHIN */
+.d2{
+    width:200px;
+    animation:jump2 11s ease-in-out infinite;
+    animation-delay:-3s;
 }
 
-.jump3{
-    top:65%;
-    animation:jump3 16s infinite;
+/* RIGHT DOLPHIN */
+.d3{
+    width:170px;
+    animation:jump3 12s ease-in-out infinite;
+    animation-delay:-5s;
 }
 
-.jump4{
-    top:20%;
-    animation:jump4 22s infinite;
+/* SMALL FAR DOLPHINS */
+.d4{
+    width:120px;
+    opacity:0.8;
+    animation:jump4 14s ease-in-out infinite;
+    animation-delay:-2s;
 }
 
-.jump5{
-    top:50%;
-    animation:jump5 20s infinite;
+.d5{
+    width:100px;
+    opacity:0.7;
+    animation:jump5 16s ease-in-out infinite;
+    animation-delay:-8s;
 }
 
-/* JUMPING MOTION */
+/* =========================
+   DOLPHIN JUMP ANIMATIONS
+========================= */
 
 @keyframes jump1{
 
     0%{
         transform:
-            translateX(-300px)
-            translateY(100px)
-            rotate(10deg)
-            scale(0.9);
+            translate(-300px, 500px)
+            rotate(20deg)
+            scale(0.8);
     }
 
-    20%{
+    35%{
         transform:
-            translateX(20vw)
-            translateY(-120px)
-            rotate(-20deg)
-            scale(1);
+            translate(35vw, 30px)
+            rotate(-35deg)
+            scale(1.05);
     }
 
-    40%{
+    55%{
         transform:
-            translateX(40vw)
-            translateY(-260px)
-            rotate(-40deg)
+            translate(52vw, -120px)
+            rotate(-55deg)
             scale(1.1);
-    }
-
-    60%{
-        transform:
-            translateX(60vw)
-            translateY(-100px)
-            rotate(-10deg)
-            scale(1);
     }
 
     100%{
         transform:
-            translateX(120vw)
-            translateY(120px)
-            rotate(15deg)
-            scale(0.9);
+            translate(120vw, 500px)
+            rotate(20deg)
+            scale(0.8);
     }
 }
 
@@ -148,32 +285,21 @@ canvas{
 
     0%{
         transform:
-            translateX(-250px)
-            translateY(120px)
-            rotate(15deg);
+            translate(-250px, 550px)
+            rotate(20deg);
     }
 
-    30%{
+    40%{
         transform:
-            translateX(35vw)
-            translateY(-220px)
-            rotate(-30deg)
-            scale(1.15);
-    }
-
-    55%{
-        transform:
-            translateX(55vw)
-            translateY(-320px)
-            rotate(-45deg)
-            scale(1.2);
+            translate(25vw, 180px)
+            rotate(-25deg)
+            scale(1.05);
     }
 
     100%{
         transform:
-            translateX(120vw)
-            translateY(150px)
-            rotate(20deg);
+            translate(120vw, 600px)
+            rotate(15deg);
     }
 }
 
@@ -181,31 +307,21 @@ canvas{
 
     0%{
         transform:
-            translateX(-350px)
-            translateY(150px)
-            rotate(10deg);
+            translate(120vw, 450px)
+            rotate(-20deg);
     }
 
-    25%{
+    40%{
         transform:
-            translateX(30vw)
-            translateY(-100px)
-            rotate(-10deg);
-    }
-
-    50%{
-        transform:
-            translateX(50vw)
-            translateY(-220px)
-            rotate(-35deg)
-            scale(1.15);
+            translate(70vw, 120px)
+            rotate(30deg)
+            scale(1.05);
     }
 
     100%{
         transform:
-            translateX(120vw)
-            translateY(180px)
-            rotate(15deg);
+            translate(-300px, 550px)
+            rotate(-15deg);
     }
 }
 
@@ -213,26 +329,21 @@ canvas{
 
     0%{
         transform:
-            translateX(-250px)
-            translateY(80px)
-            rotate(5deg)
-            scale(0.8);
+            translate(-150px, 350px)
+            rotate(15deg);
     }
 
     50%{
         transform:
-            translateX(50vw)
-            translateY(-250px)
-            rotate(-45deg)
-            scale(1.25);
+            translate(60vw, 120px)
+            rotate(-35deg)
+            scale(1.1);
     }
 
     100%{
         transform:
-            translateX(120vw)
-            translateY(100px)
-            rotate(10deg)
-            scale(0.8);
+            translate(120vw, 380px)
+            rotate(10deg);
     }
 }
 
@@ -240,33 +351,35 @@ canvas{
 
     0%{
         transform:
-            translateX(-300px)
-            translateY(120px)
-            rotate(20deg);
+            translate(120vw, 300px)
+            rotate(-20deg);
     }
 
-    35%{
+    50%{
         transform:
-            translateX(40vw)
-            translateY(-180px)
-            rotate(-25deg)
+            translate(40vw, 80px)
+            rotate(25deg)
             scale(1.1);
-    }
-
-    60%{
-        transform:
-            translateX(65vw)
-            translateY(-280px)
-            rotate(-50deg)
-            scale(1.25);
     }
 
     100%{
         transform:
-            translateX(120vw)
-            translateY(150px)
-            rotate(15deg);
+            translate(-200px, 350px)
+            rotate(-15deg);
     }
+}
+
+/* =========================
+   SPARKLES
+========================= */
+
+canvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:20;
+    pointer-events:none;
 }
 
 </style>
@@ -276,44 +389,31 @@ canvas{
 
 <div id="scene">
 
-    <!-- YOUR BACKGROUND -->
-    <img id="bg" src="background.jpg" alt="Fantasy Ocean">
+    <!-- RAINBOW -->
+    <div class="rainbow"></div>
+
+    <!-- CLOUDS -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
 
     <!-- DOLPHINS -->
-    <div id="dolphinLayer">
+    <img class="dolphin d1"
+        src="https://pngimg.com/d/dolphin_PNG713.png">
 
-        <!-- Use your own transparent dolphin PNGs -->
-        <!-- Replace dolphin.png with your file -->
+    <img class="dolphin d2"
+        src="https://pngimg.com/d/dolphin_PNG713.png">
 
-        <img src="https://pngimg.com/d/dolphin_PNG713.png"
-             class="dolphin jump1"
-             style="width:300px; animation-delay:-2s;">
+    <img class="dolphin d3"
+        src="https://pngimg.com/d/dolphin_PNG713.png">
 
-        <img src="https://pngimg.com/d/dolphin_PNG713.png"
-             class="dolphin jump2"
-             style="width:260px; animation-delay:-7s;">
+    <img class="dolphin d4"
+        src="https://pngimg.com/d/dolphin_PNG713.png">
 
-        <img src="https://pngimg.com/d/dolphin_PNG713.png"
-             class="dolphin jump3"
-             style="width:240px; animation-delay:-11s;">
+    <img class="dolphin d5"
+        src="https://pngimg.com/d/dolphin_PNG713.png">
 
-        <img src="https://pngimg.com/d/dolphin_PNG713.png"
-             class="dolphin jump4"
-             style="width:340px; animation-delay:-4s;">
-
-        <img src="https://pngimg.com/d/dolphin_PNG713.png"
-             class="dolphin jump5"
-             style="width:280px; animation-delay:-14s;">
-
-        <img src="https://pngimg.com/d/dolphin_PNG713.png"
-             class="dolphin jump1"
-             style="width:220px; animation-delay:-9s; top:70%;">
-
-        <img src="https://pngimg.com/d/dolphin_PNG713.png"
-             class="dolphin jump2"
-             style="width:370px; animation-delay:-18s; top:8%;">
-
-    </div>
+    <!-- OCEAN -->
+    <div class="ocean"></div>
 
     <!-- SPARKLES -->
     <canvas id="sparkleCanvas"></canvas>
@@ -321,6 +421,10 @@ canvas{
 </div>
 
 <script>
+
+/* =========================
+   SPARKLE SYSTEM
+========================= */
 
 const canvas = document.getElementById("sparkleCanvas");
 const ctx = canvas.getContext("2d");
@@ -338,8 +442,6 @@ resizeCanvas();
 
 window.addEventListener("resize", resizeCanvas);
 
-/* SPARKLES */
-
 const sparkles = [];
 
 class Sparkle{
@@ -352,7 +454,7 @@ class Sparkle{
         this.size = Math.random() * 4 + 1;
 
         this.life = 0;
-        this.maxLife = Math.random() * 50 + 40;
+        this.maxLife = Math.random() * 60 + 40;
 
         this.vx = (Math.random() - 0.5) * 2;
         this.vy = (Math.random() - 0.5) * 2;
@@ -381,27 +483,29 @@ class Sparkle{
         /* GLOW */
         const gradient = ctx.createRadialGradient(
             0,0,0,
-            0,0,this.size * 6
+            0,0,this.size * 8
         );
 
         gradient.addColorStop(
             0,
-            `hsla(${this.hue},100%,80%,${this.opacity})`
+            `hsla(${this.hue},100%,85%,${this.opacity})`
         );
 
         gradient.addColorStop(
             1,
-            `hsla(${this.hue},100%,80%,0)`
+            `hsla(${this.hue},100%,85%,0)`
         );
 
         ctx.fillStyle = gradient;
 
         ctx.beginPath();
-        ctx.arc(0,0,this.size * 6,0,Math.PI*2);
+        ctx.arc(0,0,this.size * 8,0,Math.PI*2);
         ctx.fill();
 
         /* STAR */
-        ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
+        ctx.strokeStyle =
+            `rgba(255,255,255,${this.opacity})`;
+
         ctx.lineWidth = 1.5;
 
         ctx.beginPath();
@@ -422,13 +526,13 @@ class Sparkle{
 
 function createSparkles(x,y){
 
-    for(let i=0;i<6;i++){
+    for(let i=0;i<8;i++){
 
         sparkles.push(new Sparkle(x,y));
     }
 }
 
-/* MOUSE */
+/* MOUSE MOVE */
 
 window.addEventListener("mousemove",(e)=>{
 
