@@ -30,7 +30,7 @@ canvas{
     background:
     radial-gradient(circle at center,
     rgba(255,255,255,0.02),
-    rgba(0,0,0,0.2));
+    rgba(0,0,0,0.22));
 }
 
 .film-grain{
@@ -61,113 +61,14 @@ const ctx = canvas.getContext("2d");
 let w, h;
 let time = 0;
 
-const clouds = [];
 const sparkles = [];
 
 function resize(){
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
-
-    createClouds();
 }
 
 window.addEventListener("resize", resize);
-
-class Cloud{
-
-    constructor(x,y,size,speed){
-
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.speed = speed;
-
-        this.parts = [];
-
-        // realistic cloud structure
-        for(let i=0;i<30;i++){
-
-            this.parts.push({
-                x:(Math.random()-0.5)*size*2,
-                y:(Math.random()-0.5)*size*0.55,
-                r:size*(0.18 + Math.random()*0.22)
-            });
-        }
-    }
-
-    draw(){
-
-        ctx.save();
-        ctx.translate(this.x,this.y);
-
-        this.parts.sort((a,b)=>a.r-b.r);
-
-        this.parts.forEach((p,index)=>{
-
-            // realistic sharp clouds
-            const grad = ctx.createRadialGradient(
-                p.x - p.r*0.2,
-                p.y - p.r*0.2,
-                1,
-                p.x,
-                p.y,
-                p.r
-            );
-
-            grad.addColorStop(0,
-                "rgba(255,255,255,0.98)");
-
-            grad.addColorStop(0.45,
-                "rgba(255,248,255,0.96)");
-
-            grad.addColorStop(0.75,
-                "rgba(255,220,245,0.82)");
-
-            grad.addColorStop(1,
-                "rgba(255,190,235,0)");
-
-            ctx.fillStyle = grad;
-
-            ctx.beginPath();
-            ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-            ctx.fill();
-
-            // subtle definition shadows
-            ctx.strokeStyle =
-                "rgba(255,255,255,0.04)";
-
-            ctx.lineWidth = 1;
-
-            ctx.stroke();
-        });
-
-        ctx.restore();
-
-        this.x += this.speed;
-
-        if(this.x - this.size > w + 400){
-            this.x = -400;
-        }
-    }
-}
-
-function createClouds(){
-
-    clouds.length = 0;
-
-    // fewer realistic cinematic clouds
-    for(let i=0;i<4;i++){
-
-        clouds.push(
-            new Cloud(
-                Math.random()*w,
-                40 + Math.random()*h*0.22,
-                180 + Math.random()*140,
-                0.01 + Math.random()*0.02
-            )
-        );
-    }
-}
 
 class Sparkle{
 
@@ -420,10 +321,6 @@ function animate(){
     drawSky();
 
     drawSun();
-
-    clouds.forEach(cloud=>{
-        cloud.draw();
-    });
 
     drawSea();
 
