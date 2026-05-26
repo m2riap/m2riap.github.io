@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Y2K Sunset Ocean</title>
+<title>Realistic Sunset Sea</title>
 
 <style>
 *{
@@ -17,27 +17,10 @@ html,body{
     height:100%;
     overflow:hidden;
     background:#000;
-    font-family:Arial,sans-serif;
 }
 
 canvas{
     display:block;
-}
-
-.title{
-    position:absolute;
-    top:35px;
-    width:100%;
-    text-align:center;
-    color:white;
-    font-size:2rem;
-    letter-spacing:14px;
-    font-weight:300;
-    text-shadow:
-    0 0 10px rgba(255,255,255,0.8),
-    0 0 30px rgba(255,120,255,0.6),
-    0 0 60px rgba(100,180,255,0.5);
-    pointer-events:none;
 }
 
 .overlay{
@@ -45,22 +28,22 @@ canvas{
     inset:0;
     pointer-events:none;
     background:
-    linear-gradient(to bottom,
+    radial-gradient(circle at center,
     rgba(255,255,255,0.04),
-    rgba(255,255,255,0.01),
-    rgba(0,0,0,0.12));
+    rgba(0,0,0,0.18));
+    mix-blend-mode:screen;
 }
 
-.scanlines{
+.film{
     position:absolute;
     inset:0;
     pointer-events:none;
-    opacity:0.05;
+    opacity:0.03;
     background:
     repeating-linear-gradient(
         to bottom,
-        rgba(255,255,255,0.15) 0px,
-        rgba(255,255,255,0.15) 1px,
+        rgba(255,255,255,0.2) 0px,
+        rgba(255,255,255,0.2) 1px,
         transparent 2px,
         transparent 4px
     );
@@ -70,9 +53,8 @@ canvas{
 
 <body>
 
-<div class="title">Y2K SUNSET</div>
 <div class="overlay"></div>
-<div class="scanlines"></div>
+<div class="film"></div>
 
 <canvas id="canvas"></canvas>
 
@@ -105,15 +87,15 @@ class Cloud{
         this.speed = speed;
         this.opacity = opacity;
 
-        this.puffs = [];
+        this.parts = [];
 
-        // bigger fluffier cloud groups
-        for(let i=0;i<18;i++){
+        // detailed fluffy clouds
+        for(let i=0;i<22;i++){
 
-            this.puffs.push({
-                x:(Math.random()-0.5)*this.size*2,
-                y:(Math.random()-0.5)*this.size*0.6,
-                r:this.size*(0.35 + Math.random()*0.35)
+            this.parts.push({
+                x:(Math.random()-0.5)*this.size*2.2,
+                y:(Math.random()-0.5)*this.size*0.5,
+                r:this.size*(0.3 + Math.random()*0.35)
             });
         }
     }
@@ -125,18 +107,24 @@ class Cloud{
 
         ctx.globalAlpha = this.opacity;
 
-        this.puffs.forEach(p=>{
+        this.parts.forEach(p=>{
 
             const grad = ctx.createRadialGradient(
                 p.x,p.y,0,
                 p.x,p.y,p.r
             );
 
-            // sharper y2k glossy clouds
-            grad.addColorStop(0,"rgba(255,255,255,1)");
-            grad.addColorStop(0.4,"rgba(255,240,255,0.95)");
-            grad.addColorStop(0.7,"rgba(255,180,255,0.4)");
-            grad.addColorStop(1,"rgba(255,160,255,0)");
+            grad.addColorStop(0,
+                "rgba(255,255,255,1)");
+
+            grad.addColorStop(0.35,
+                "rgba(255,245,255,0.95)");
+
+            grad.addColorStop(0.7,
+                "rgba(255,190,230,0.45)");
+
+            grad.addColorStop(1,
+                "rgba(255,180,220,0)");
 
             ctx.fillStyle = grad;
 
@@ -149,8 +137,8 @@ class Cloud{
 
         this.x += this.speed;
 
-        if(this.x - this.size > w + 400){
-            this.x = -400;
+        if(this.x - this.size > w + 500){
+            this.x = -500;
         }
     }
 }
@@ -159,16 +147,16 @@ function createClouds(){
 
     clouds.length = 0;
 
-    // fewer larger clouds
+    // fewer but massive cinematic clouds
     for(let i=0;i<5;i++){
 
         clouds.push(
             new Cloud(
                 Math.random()*w,
-                50 + Math.random()*h*0.25,
-                130 + Math.random()*110,
-                0.02 + Math.random()*0.03,
-                0.18 + Math.random()*0.08
+                50 + Math.random()*h*0.24,
+                160 + Math.random()*140,
+                0.015 + Math.random()*0.03,
+                0.16 + Math.random()*0.07
             )
         );
     }
@@ -186,9 +174,9 @@ class Sparkle{
 
         this.life = 1;
 
-        this.size = 1 + Math.random()*4;
+        this.size = 1 + Math.random()*3;
 
-        this.hue = 280 + Math.random()*80;
+        this.hue = 290 + Math.random()*60;
     }
 
     update(){
@@ -235,91 +223,107 @@ window.addEventListener("mousemove",(e)=>{
 
 function drawSky(){
 
-    // bright y2k pink/blue gradient
+    // high quality pink/blue y2k sunset
     const sky = ctx.createLinearGradient(0,0,0,h);
 
-    sky.addColorStop(0,"#243BFF");
-    sky.addColorStop(0.18,"#4E6BFF");
-    sky.addColorStop(0.4,"#FF61D8");
-    sky.addColorStop(0.62,"#FF8BCB");
-    sky.addColorStop(0.82,"#7EE7FF");
-    sky.addColorStop(1,"#FFE2FF");
+    sky.addColorStop(0,"#1731a6");
+    sky.addColorStop(0.2,"#4f68ff");
+    sky.addColorStop(0.42,"#ff67d7");
+    sky.addColorStop(0.62,"#ff9ed6");
+    sky.addColorStop(0.82,"#89d8ff");
+    sky.addColorStop(1,"#fff0ff");
 
     ctx.fillStyle = sky;
+    ctx.fillRect(0,0,w,h);
+
+    // subtle glow layer
+    const glow = ctx.createRadialGradient(
+        w/2,h*0.55,50,
+        w/2,h*0.55,w*0.7
+    );
+
+    glow.addColorStop(0,
+        "rgba(255,180,255,0.2)");
+
+    glow.addColorStop(1,
+        "rgba(255,180,255,0)");
+
+    ctx.fillStyle = glow;
     ctx.fillRect(0,0,w,h);
 }
 
 function drawSun(){
 
     const x = w/2;
-    const y = h*0.55;
+    const y = h*0.56;
 
+    // realistic glow
     const glow = ctx.createRadialGradient(
-        x,y,60,
-        x,y,300
+        x,y,70,
+        x,y,380
     );
 
     glow.addColorStop(0,
         "rgba(255,255,255,1)");
 
-    glow.addColorStop(0.2,
-        "rgba(255,220,255,0.95)");
+    glow.addColorStop(0.18,
+        "rgba(255,245,255,0.95)");
 
-    glow.addColorStop(0.45,
-        "rgba(255,120,220,0.6)");
+    glow.addColorStop(0.4,
+        "rgba(255,180,240,0.55)");
 
     glow.addColorStop(1,
-        "rgba(255,120,220,0)");
+        "rgba(255,140,220,0)");
 
     ctx.fillStyle = glow;
 
     ctx.beginPath();
-    ctx.arc(x,y,300,0,Math.PI*2);
+    ctx.arc(x,y,380,0,Math.PI*2);
     ctx.fill();
 
-    // glowing y2k sun
+    // crisp sun core
     ctx.beginPath();
-    ctx.fillStyle = "#fff8ff";
-    ctx.arc(x,y,75,0,Math.PI*2);
+    ctx.fillStyle = "#fffbff";
+    ctx.arc(x,y,82,0,Math.PI*2);
     ctx.fill();
 }
 
 function drawSea(){
 
-    const horizon = h*0.55;
+    const horizon = h*0.56;
 
-    // vivid ocean tones
+    // richer ocean colors
     const sea = ctx.createLinearGradient(
         0,horizon,
         0,h
     );
 
-    sea.addColorStop(0,"#FF7EDB");
-    sea.addColorStop(0.15,"#56C6FF");
-    sea.addColorStop(0.45,"#2E59C9");
-    sea.addColorStop(1,"#081A44");
+    sea.addColorStop(0,"#ff7fe2");
+    sea.addColorStop(0.15,"#66d3ff");
+    sea.addColorStop(0.42,"#2c66d1");
+    sea.addColorStop(1,"#06153c");
 
     ctx.fillStyle = sea;
     ctx.fillRect(0,horizon,w,h);
 
-    // realistic layered waves
+    // detailed layered waves
     for(let y=horizon; y<h; y+=2){
 
         ctx.beginPath();
 
-        for(let x=0; x<w; x+=5){
+        for(let x=0; x<w; x+=4){
 
             const wave =
                 y +
 
-                // large waves
-                Math.sin(x*0.012 + time*1.8 + y*0.01)*6 +
+                // deep ocean movement
+                Math.sin(x*0.009 + time*1.5 + y*0.012)*7 +
 
                 // medium waves
-                Math.sin(x*0.03 + time*3)*3 +
+                Math.sin(x*0.028 + time*2.8)*3 +
 
                 // tiny ripples
-                Math.sin(x*0.08 + time*5)*1.2;
+                Math.sin(x*0.08 + time*5.5)*1.2;
 
             if(x===0){
                 ctx.moveTo(x,wave);
@@ -329,7 +333,7 @@ function drawSea(){
         }
 
         const alpha =
-            0.03 + ((y-horizon)/h)*0.06;
+            0.03 + ((y-horizon)/h)*0.08;
 
         ctx.strokeStyle =
             `rgba(255,255,255,${alpha})`;
@@ -337,27 +341,30 @@ function drawSea(){
         ctx.stroke();
     }
 
-    // bright reflection
+    // realistic sun reflection
     const reflection = ctx.createLinearGradient(
         w/2,horizon,
         w/2,h
     );
 
     reflection.addColorStop(0,
-        "rgba(255,210,255,0.9)");
+        "rgba(255,220,255,0.95)");
+
+    reflection.addColorStop(0.4,
+        "rgba(255,190,255,0.35)");
 
     reflection.addColorStop(1,
-        "rgba(255,210,255,0)");
+        "rgba(255,180,255,0)");
 
     ctx.fillStyle = reflection;
 
     ctx.beginPath();
 
-    ctx.moveTo(w/2 - 60,horizon);
-    ctx.lineTo(w/2 + 60,horizon);
+    ctx.moveTo(w/2 - 70,horizon);
+    ctx.lineTo(w/2 + 70,horizon);
 
-    ctx.lineTo(w/2 + 300,h);
-    ctx.lineTo(w/2 - 300,h);
+    ctx.lineTo(w/2 + 330,h);
+    ctx.lineTo(w/2 - 330,h);
 
     ctx.closePath();
     ctx.fill();
@@ -371,10 +378,10 @@ function drawAtmosphere(){
     );
 
     haze.addColorStop(0,
-        "rgba(255,150,255,0)");
+        "rgba(255,170,255,0)");
 
     haze.addColorStop(1,
-        "rgba(255,120,255,0.08)");
+        "rgba(255,120,255,0.07)");
 
     ctx.fillStyle = haze;
     ctx.fillRect(0,0,w,h);
@@ -394,6 +401,7 @@ function animate(){
     });
 
     drawSea();
+
     drawAtmosphere();
 
     // sparkles
@@ -407,9 +415,9 @@ function animate(){
         }
     }
 
-    // glossy y2k glow
+    // cinematic color grading
     ctx.fillStyle =
-    "rgba(255,180,255,0.03)";
+    "rgba(255,170,255,0.025)";
     ctx.fillRect(0,0,w,h);
 }
 
