@@ -2,15 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Sunset Sea Dreamscape</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Realistic Sunset Sea</title>
 
 <style>
-    html, body {
+    * {
         margin: 0;
-        overflow: hidden;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
         width: 100%;
         height: 100%;
+        overflow: hidden;
         background: #000;
         font-family: Arial, sans-serif;
     }
@@ -19,16 +24,27 @@
         display: block;
     }
 
-    .overlay {
+    .vignette {
         position: absolute;
         inset: 0;
         pointer-events: none;
         background:
-            radial-gradient(circle at 50% 70%, rgba(255,140,0,0.12), transparent 45%),
-            linear-gradient(to bottom,
-                rgba(255,255,255,0.03),
-                rgba(0,0,0,0.15));
-        mix-blend-mode: screen;
+            radial-gradient(circle at center,
+            transparent 45%,
+            rgba(0,0,0,0.35) 100%);
+        mix-blend-mode: multiply;
+    }
+
+    .grain {
+        position: absolute;
+        inset: 0;
+        opacity: 0.04;
+        pointer-events: none;
+        background-image:
+            repeating-radial-gradient(circle at 0 0,
+            transparent 0,
+            #fff 1px,
+            transparent 2px);
     }
 
     .title {
@@ -36,12 +52,13 @@
         top: 40px;
         width: 100%;
         text-align: center;
-        color: rgba(255,255,255,0.9);
+        color: rgba(255,255,255,0.92);
+        letter-spacing: 10px;
         font-size: 2rem;
-        letter-spacing: 4px;
+        font-weight: 300;
         text-shadow:
-            0 0 10px rgba(255,255,255,0.4),
-            0 0 30px rgba(255,180,100,0.4);
+            0 0 15px rgba(255,255,255,0.4),
+            0 0 40px rgba(255,160,80,0.3);
         pointer-events: none;
     }
 </style>
@@ -50,68 +67,69 @@
 <body>
 
 <div class="title">SUNSET SEA</div>
-<div class="overlay"></div>
+<div class="grain"></div>
+<div class="vignette"></div>
 
-<canvas id="scene"></canvas>
+<canvas id="canvas"></canvas>
 
 <script>
-const canvas = document.getElementById("scene");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 let w, h;
 let time = 0;
 
-const sparkles = [];
 const clouds = [];
-const stars = [];
+const sparkles = [];
 
 function resize() {
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
-
-    createClouds();
+    generateClouds();
 }
 
 window.addEventListener("resize", resize);
-resize();
 
 class Cloud {
-    constructor(x, y, size, speed, alpha) {
+    constructor(x, y, scale, speed, opacity) {
         this.x = x;
         this.y = y;
-        this.size = size;
+        this.scale = scale;
         this.speed = speed;
-        this.alpha = alpha;
+        this.opacity = opacity;
     }
 
     draw() {
         ctx.save();
-        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.scale(this.scale, this.scale);
+
+        ctx.globalAlpha = this.opacity;
 
         for (let i = 0; i < 18; i++) {
-            const ox = Math.sin(i * 1.8) * this.size * 0.6;
-            const oy = Math.cos(i * 2.3) * this.size * 0.15;
+            const offsetX = Math.sin(i * 1.3) * 80;
+            const offsetY = Math.cos(i * 1.7) * 20;
 
             const grad = ctx.createRadialGradient(
-                this.x + ox,
-                this.y + oy,
-                0,
-                this.x + ox,
-                this.y + oy,
-                this.size
+                offsetX,
+                offsetY,
+                10,
+                offsetX,
+                offsetY,
+                90
             );
 
             grad.addColorStop(0, "rgba(255,255,255,0.95)");
-            grad.addColorStop(0.5, "rgba(255,210,180,0.55)");
-            grad.addColorStop(1, "rgba(255,170,120,0)");
+            grad.addColorStop(0.4, "rgba(255,230,220,0.75)");
+            grad.addColorStop(1, "rgba(255,180,120,0)");
 
             ctx.fillStyle = grad;
 
             ctx.beginPath();
             ctx.arc(
-                this.x + ox,
-                this.y + oy,
-                this.size * (0.5 + Math.random() * 0.2),
+                offsetX,
+                offsetY,
+                70 + Math.random() * 20,
                 0,
                 Math.PI * 2
             );
@@ -122,23 +140,23 @@ class Cloud {
 
         this.x += this.speed;
 
-        if (this.x - this.size > w) {
-            this.x = -200;
+        if (this.x > w + 300) {
+            this.x = -300;
         }
     }
 }
 
-function createClouds() {
+function generateClouds() {
     clouds.length = 0;
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 16; i++) {
         clouds.push(
             new Cloud(
                 Math.random() * w,
                 Math.random() * h * 0.45,
-                50 + Math.random() * 80,
-                0.05 + Math.random() * 0.15,
-                0.12 + Math.random() * 0.18
+                0.7 + Math.random() * 1.3,
+                0.05 + Math.random() * 0.12,
+                0.12 + Math.random() * 0.15
             )
         );
     }
@@ -148,24 +166,28 @@ class Sparkle {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.life = 1;
-        this.size = 2 + Math.random() * 3;
+
         this.vx = (Math.random() - 0.5) * 2;
         this.vy = (Math.random() - 0.5) * 2;
-        this.hue = 40 + Math.random() * 30;
+
+        this.life = 1;
+        this.size = 1 + Math.random() * 4;
+
+        this.hue = 35 + Math.random() * 25;
     }
 
     update() {
         this.x += this.vx;
         this.y += this.vy;
-        this.life -= 0.02;
+        this.life -= 0.018;
     }
 
     draw() {
         ctx.save();
+
         ctx.globalAlpha = this.life;
 
-        ctx.shadowBlur = 15;
+        ctx.shadowBlur = 25;
         ctx.shadowColor = `hsla(${this.hue},100%,70%,1)`;
 
         ctx.fillStyle = `hsla(${this.hue},100%,75%,1)`;
@@ -178,8 +200,8 @@ class Sparkle {
     }
 }
 
-window.addEventListener("mousemove", (e) => {
-    for (let i = 0; i < 4; i++) {
+window.addEventListener("mousemove", e => {
+    for (let i = 0; i < 5; i++) {
         sparkles.push(
             new Sparkle(
                 e.clientX + (Math.random() - 0.5) * 20,
@@ -192,11 +214,11 @@ window.addEventListener("mousemove", (e) => {
 function drawSky() {
     const sky = ctx.createLinearGradient(0, 0, 0, h);
 
-    sky.addColorStop(0, "#07111f");
-    sky.addColorStop(0.25, "#253c6b");
-    sky.addColorStop(0.5, "#ff925e");
-    sky.addColorStop(0.7, "#ffb57d");
-    sky.addColorStop(1, "#1a3550");
+    sky.addColorStop(0, "#081120");
+    sky.addColorStop(0.2, "#243b6b");
+    sky.addColorStop(0.45, "#ff8e61");
+    sky.addColorStop(0.65, "#ffb784");
+    sky.addColorStop(1, "#ffe0b8");
 
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, w, h);
@@ -206,101 +228,108 @@ function drawSun() {
     const x = w / 2;
     const y = h * 0.58;
 
-    const glow = ctx.createRadialGradient(x, y, 20, x, y, 180);
+    const glow = ctx.createRadialGradient(
+        x, y, 40,
+        x, y, 250
+    );
 
-    glow.addColorStop(0, "rgba(255,240,200,1)");
-    glow.addColorStop(0.2, "rgba(255,200,120,0.9)");
-    glow.addColorStop(0.5, "rgba(255,120,50,0.35)");
+    glow.addColorStop(0, "rgba(255,250,220,1)");
+    glow.addColorStop(0.2, "rgba(255,220,150,0.95)");
+    glow.addColorStop(0.45, "rgba(255,160,90,0.45)");
     glow.addColorStop(1, "rgba(255,120,50,0)");
 
     ctx.fillStyle = glow;
 
     ctx.beginPath();
-    ctx.arc(x, y, 180, 0, Math.PI * 2);
+    ctx.arc(x, y, 250, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.beginPath();
-    ctx.fillStyle = "#fff5c0";
-    ctx.arc(x, y, 55, 0, Math.PI * 2);
+    ctx.fillStyle = "#fff5cf";
+    ctx.arc(x, y, 60, 0, Math.PI * 2);
     ctx.fill();
 }
 
 function drawSea() {
-    const seaTop = h * 0.58;
+    const horizon = h * 0.58;
 
-    const seaGrad = ctx.createLinearGradient(0, seaTop, 0, h);
+    const sea = ctx.createLinearGradient(0, horizon, 0, h);
 
-    seaGrad.addColorStop(0, "#ff8f5a");
-    seaGrad.addColorStop(0.15, "#285a7a");
-    seaGrad.addColorStop(1, "#06151f");
+    sea.addColorStop(0, "#ff9966");
+    sea.addColorStop(0.15, "#2f6b89");
+    sea.addColorStop(0.5, "#123347");
+    sea.addColorStop(1, "#061018");
 
-    ctx.fillStyle = seaGrad;
-    ctx.fillRect(0, seaTop, w, h - seaTop);
+    ctx.fillStyle = sea;
+    ctx.fillRect(0, horizon, w, h);
 
-    for (let y = seaTop; y < h; y += 3) {
-        const wave =
-            Math.sin(y * 0.03 + time * 1.2) * 10;
-
-        ctx.strokeStyle = `rgba(255,255,255,${
-            0.03 + (y - seaTop) / h * 0.05
-        })`;
-
+    for (let y = horizon; y < h; y += 3) {
         ctx.beginPath();
 
-        for (let x = 0; x < w; x += 12) {
-            const yy =
+        for (let x = 0; x < w; x += 10) {
+            const wave =
                 y +
-                Math.sin(x * 0.018 + time + y * 0.02) * 3 +
-                wave * 0.2;
+                Math.sin(x * 0.018 + time * 2 + y * 0.015) * 4 +
+                Math.sin(x * 0.006 + time) * 6;
 
-            if (x === 0) ctx.moveTo(x, yy);
-            else ctx.lineTo(x, yy);
+            if (x === 0) ctx.moveTo(x, wave);
+            else ctx.lineTo(x, wave);
         }
+
+        ctx.strokeStyle = `rgba(255,255,255,${
+            0.02 + ((y - horizon) / h) * 0.05
+        })`;
 
         ctx.stroke();
     }
 
-    // reflection
+    // Reflection path
     const reflect = ctx.createLinearGradient(
-        w/2,
-        seaTop,
-        w/2,
+        w / 2,
+        horizon,
+        w / 2,
         h
     );
 
-    reflect.addColorStop(0, "rgba(255,220,150,0.5)");
-    reflect.addColorStop(1, "rgba(255,220,150,0)");
+    reflect.addColorStop(0, "rgba(255,240,180,0.6)");
+    reflect.addColorStop(1, "rgba(255,240,180,0)");
 
     ctx.fillStyle = reflect;
 
     ctx.beginPath();
-    ctx.moveTo(w/2 - 50, seaTop);
-    ctx.lineTo(w/2 + 50, seaTop);
-    ctx.lineTo(w/2 + 250, h);
-    ctx.lineTo(w/2 - 250, h);
+    ctx.moveTo(w / 2 - 40, horizon);
+    ctx.lineTo(w / 2 + 40, horizon);
+    ctx.lineTo(w / 2 + 250, h);
+    ctx.lineTo(w / 2 - 250, h);
     ctx.closePath();
+
     ctx.fill();
 }
 
 function drawAtmosphere() {
-    const mist = ctx.createLinearGradient(0, h*0.45, 0, h);
+    const haze = ctx.createLinearGradient(
+        0,
+        h * 0.4,
+        0,
+        h
+    );
 
-    mist.addColorStop(0, "rgba(255,180,120,0)");
-    mist.addColorStop(1, "rgba(255,160,120,0.12)");
+    haze.addColorStop(0, "rgba(255,200,150,0)");
+    haze.addColorStop(1, "rgba(255,160,120,0.15)");
 
-    ctx.fillStyle = mist;
+    ctx.fillStyle = haze;
     ctx.fillRect(0, 0, w, h);
 }
 
 function animate() {
     requestAnimationFrame(animate);
 
-    time += 0.005;
+    time += 0.003;
 
     drawSky();
     drawSun();
 
-    clouds.forEach(c => c.draw());
+    clouds.forEach(cloud => cloud.draw());
 
     drawSea();
     drawAtmosphere();
@@ -314,11 +343,12 @@ function animate() {
         }
     }
 
-    // cinematic glow
-    ctx.fillStyle = "rgba(255,120,50,0.03)";
-    ctx.fillRect(0,0,w,h);
+    // cinematic warmth
+    ctx.fillStyle = "rgba(255,120,60,0.025)";
+    ctx.fillRect(0, 0, w, h);
 }
 
+resize();
 animate();
 </script>
 
